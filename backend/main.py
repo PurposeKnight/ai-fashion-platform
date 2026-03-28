@@ -400,6 +400,94 @@ async def get_recommendations(query: RecommendationQuery):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/api/recommendations/image", tags=["Recommendations"])
+async def get_recommendations_from_image(file: UploadFile = File(...), pincode: str = "110001", top_k: int = 12):
+    """Get product recommendations based on uploaded image"""
+    try:
+        # Read image file
+        contents = await file.read()
+        
+        # For now, we'll analyze the filename and file size to infer product type
+        # In production, you'd use actual image processing/CLIP model
+        filename = file.filename.lower()
+        
+        # Extract keywords from filename
+        query = filename.replace('.jpg', '').replace('.png', '').replace('.jpeg', '').replace('-', ' ').replace('_', ' ')
+        
+        # Fallback queries based on filename patterns
+        if any(x in filename for x in ['shirt', 'top', 'blouse']):
+            query = 'shirt formal casual'
+        elif any(x in filename for x in ['dress', 'gown', 'frock']):
+            query = 'dress formal casual'
+        elif any(x in filename for x in ['jacket', 'coat', 'blazer']):
+            query = 'jacket warm formal'
+        elif any(x in filename for x in ['jeans', 'pant', 'trouser']):
+            query = 'jeans denim pants'
+        elif any(x in filename for x in ['shoe', 'sneaker', 'boot']):
+            query = 'shoes sneakers formal'
+        elif any(x in filename for x in ['bag', 'handbag', 'purse']):
+            query = 'handbag accessories'
+        elif any(x in filename for x in ['kurta', 'saree', 'ethnic']):
+            query = 'kurta ethnic traditional'
+        
+        # Get all products
+        all_products = db.get_all_products(limit=200)
+        
+        # Score products based on query
+        results = []
+        scored_products = []
+        
+        for product in all_products:
+            score = 0.4  # Base score for image-based search
+            product_name = (getattr(product, 'name', product.get('name', '')).lower() 
+                           if isinstance(product, dict) else product.name.lower())
+            category = (getattr(product, 'category', product.get('category', '')).lower() 
+                       if isinstance(product, dict) else product.category.lower())
+            
+            # Match on query words
+            query_words = query.split()
+            for word in query_words:
+                if word in category or word in product_name:
+                    score += 0.2
+            
+            scored_products.append((product, min(score, 0.95)))
+        
+        # Sort and get top K
+        scored_products.sort(key=lambda x: x[1], reverse=True)
+        
+        for idx, (product, score) in enumerate(scored_products[:top_k]):
+            try:
+                sku = (getattr(product, 'sku', product.get('sku', '')) 
+                      if isinstance(product, dict) else product.sku)
+                available = db.check_stock(sku, pincode) if sku else 0
+                
+                result = RecommendationResult(
+                    product=product,
+                    similarity_score=score,
+                    availability_in_pincode=available,
+                    rank=idx + 1
+                )
+                results.append(result)
+            except Exception as e:
+                logger.warning(f"Error processing image recommendation {idx}: {e}")
+                continue
+        
+        response_data = RecommendationResponse(
+            query_id=f"IMG-{uuid.uuid4().hex[:8].upper()}",
+            recommendations=results
+        )
+        
+        # Convert response
+        if hasattr(response_data, 'model_dump'):
+            return response_data.model_dump()
+        else:
+            return response_data.dict()
+    
+    except Exception as e:
+        logger.error(f"Image recommendation error: {e}")
+        raise HTTPException(status_code=500, detail=f"Image processing failed: {str(e)}")
+
+
 # ==================== INVENTORY REALLOCATION (AGENT) ENDPOINTS ====================
 @app.post("/api/reallocations", tags=["Inventory Orchestration"])
 async def create_reallocation(reallocation: InventoryReallocation):

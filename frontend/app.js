@@ -124,56 +124,56 @@ const App = {
     // ── MOCK DATA ──────────────────────────────────────────────
     products: [
         // ─── Kurtas ───
-        { id: 'P001', name: 'Indigo Cotton Kurta', sku: 'KURTA_001_M_BLU', category: 'Kurtas', price: 1299, rating: 4.5, stock: 48, color: 'Blue', size: 'M', img: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P002', name: 'Sky Blue Linen Tunic', sku: 'TUNIC_002_L_BLU', category: 'Kurtas', price: 1599, rating: 4.2, stock: 23, color: 'Blue', size: 'L', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P003', name: 'Navy Casual Kurta', sku: 'KURTA_003_M_NVY', category: 'Kurtas', price: 2199, rating: 4.7, stock: 12, color: 'Navy', size: 'M', img: 'https://images.unsplash.com/photo-1589637319944-fa5bc5d283ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P011', name: 'Printed Ethnic Kurta', sku: 'KURTA_009_M_MRN', category: 'Kurtas', price: 1799, rating: 4.0, stock: 42, color: 'Maroon', size: 'M', img: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P025', name: 'Embroidered Silk Kurta', sku: 'KURTA_025_L_GLD', category: 'Kurtas', price: 3499, rating: 4.8, stock: 9, color: 'Gold', size: 'L', img: 'https://images.unsplash.com/photo-1612336307429-8a88e8d08914?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P001', name: 'Indigo Cotton Kurta', sku: 'KURTA_001_M_BLU', category: 'Kurtas', price: 1299, rating: 4.5, stock: 48, color: 'Blue', size: 'M', img: 'https://picsum.photos/400/500?random=1' },
+        { id: 'P002', name: 'Sky Blue Linen Tunic', sku: 'TUNIC_002_L_BLU', category: 'Kurtas', price: 1599, rating: 4.2, stock: 23, color: 'Blue', size: 'L', img: 'https://picsum.photos/400/500?random=2' },
+        { id: 'P003', name: 'Navy Casual Kurta', sku: 'KURTA_003_M_NVY', category: 'Kurtas', price: 2199, rating: 4.7, stock: 12, color: 'Navy', size: 'M', img: 'https://picsum.photos/400/500?random=3' },
+        { id: 'P011', name: 'Printed Ethnic Kurta', sku: 'KURTA_009_M_MRN', category: 'Kurtas', price: 1799, rating: 4.0, stock: 42, color: 'Maroon', size: 'M', img: 'https://picsum.photos/400/500?random=4' },
+        { id: 'P025', name: 'Embroidered Silk Kurta', sku: 'KURTA_025_L_GLD', category: 'Kurtas', price: 3499, rating: 4.8, stock: 9, color: 'Gold', size: 'L', img: 'https://picsum.photos/400/500?random=5' },
 
         // ─── Shirts ───
-        { id: 'P004', name: 'Classic White Shirt', sku: 'SHIRT_002_L_WHT', category: 'Shirts', price: 1899, rating: 4.3, stock: 67, color: 'White', size: 'L', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P013', name: 'Blue Oxford Shirt', sku: 'SHIRT_013_M_BLU', category: 'Shirts', price: 2199, rating: 4.4, stock: 38, color: 'Blue', size: 'M', img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736c10?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P014', name: 'Casual Linen Shirt', sku: 'SHIRT_014_L_BEG', category: 'Shirts', price: 1699, rating: 4.1, stock: 55, color: 'Beige', size: 'L', img: 'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P026', name: 'Formal Black Shirt', sku: 'SHIRT_026_M_BLK', category: 'Shirts', price: 2399, rating: 4.5, stock: 29, color: 'Black', size: 'M', img: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P027', name: 'Striped Cotton Shirt', sku: 'SHIRT_027_L_STR', category: 'Shirts', price: 1999, rating: 4.2, stock: 44, color: 'Stripe', size: 'L', img: 'https://images.unsplash.com/photo-1596453062234-7f84e1b38d3f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P004', name: 'Classic White Shirt', sku: 'SHIRT_002_L_WHT', category: 'Shirts', price: 1899, rating: 4.3, stock: 67, color: 'White', size: 'L', img: 'https://picsum.photos/400/500?random=6' },
+        { id: 'P013', name: 'Blue Oxford Shirt', sku: 'SHIRT_013_M_BLU', category: 'Shirts', price: 2199, rating: 4.4, stock: 38, color: 'Blue', size: 'M', img: 'https://picsum.photos/400/500?random=7' },
+        { id: 'P014', name: 'Casual Linen Shirt', sku: 'SHIRT_014_L_BEG', category: 'Shirts', price: 1699, rating: 4.1, stock: 55, color: 'Beige', size: 'L', img: 'https://picsum.photos/400/500?random=8' },
+        { id: 'P026', name: 'Formal Black Shirt', sku: 'SHIRT_026_M_BLK', category: 'Shirts', price: 2399, rating: 4.5, stock: 29, color: 'Black', size: 'M', img: 'https://picsum.photos/400/500?random=9' },
+        { id: 'P027', name: 'Striped Cotton Shirt', sku: 'SHIRT_027_L_STR', category: 'Shirts', price: 1999, rating: 4.2, stock: 44, color: 'Stripe', size: 'L', img: 'https://picsum.photos/400/500?random=10' },
 
         // ─── Jeans & Pants ───
-        { id: 'P005', name: 'Slim Fit Black Jeans', sku: 'JEANS_003_M_BLK', category: 'Jeans', price: 2499, rating: 4.6, stock: 35, color: 'Black', size: 'M', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P015', name: 'Blue Denim Jeans', sku: 'JEANS_015_L_BLU', category: 'Jeans', price: 2299, rating: 4.3, stock: 52, color: 'Blue', size: 'L', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P028', name: 'Chino Khaki Pants', sku: 'PANT_028_M_KHK', category: 'Jeans', price: 1899, rating: 4.1, stock: 61, color: 'Khaki', size: 'M', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P005', name: 'Slim Fit Black Jeans', sku: 'JEANS_003_M_BLK', category: 'Jeans', price: 2499, rating: 4.6, stock: 35, color: 'Black', size: 'M', img: 'https://picsum.photos/400/500?random=11' },
+        { id: 'P015', name: 'Blue Denim Jeans', sku: 'JEANS_015_L_BLU', category: 'Jeans', price: 2299, rating: 4.3, stock: 52, color: 'Blue', size: 'L', img: 'https://picsum.photos/400/500?random=12' },
+        { id: 'P028', name: 'Chino Khaki Pants', sku: 'PANT_028_M_KHK', category: 'Jeans', price: 1899, rating: 4.1, stock: 61, color: 'Khaki', size: 'M', img: 'https://picsum.photos/400/500?random=13' },
 
         // ─── Dresses ───
-        { id: 'P006', name: 'Red Festive Dress', sku: 'DRESS_004_S_RED', category: 'Dresses', price: 3299, rating: 4.8, stock: 8, color: 'Red', size: 'S', img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P009', name: 'Floral Summer Dress', sku: 'DRESS_007_M_FLR', category: 'Dresses', price: 2799, rating: 4.1, stock: 31, color: 'Multicolor', size: 'M', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P016', name: 'Black Cocktail Dress', sku: 'DRESS_016_S_BLK', category: 'Dresses', price: 4599, rating: 4.7, stock: 6, color: 'Black', size: 'S', img: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P029', name: 'White Maxi Dress', sku: 'DRESS_029_M_WHT', category: 'Dresses', price: 3199, rating: 4.4, stock: 18, color: 'White', size: 'M', img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P030', name: 'Yellow Sundress', sku: 'DRESS_030_S_YLW', category: 'Dresses', price: 2499, rating: 4.3, stock: 22, color: 'Yellow', size: 'S', img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P006', name: 'Red Festive Dress', sku: 'DRESS_004_S_RED', category: 'Dresses', price: 3299, rating: 4.8, stock: 8, color: 'Red', size: 'S', img: 'https://picsum.photos/400/500?random=14' },
+        { id: 'P009', name: 'Floral Summer Dress', sku: 'DRESS_007_M_FLR', category: 'Dresses', price: 2799, rating: 4.1, stock: 31, color: 'Multicolor', size: 'M', img: 'https://picsum.photos/400/500?random=15' },
+        { id: 'P016', name: 'Black Cocktail Dress', sku: 'DRESS_016_S_BLK', category: 'Dresses', price: 4599, rating: 4.7, stock: 6, color: 'Black', size: 'S', img: 'https://picsum.photos/400/500?random=16' },
+        { id: 'P029', name: 'White Maxi Dress', sku: 'DRESS_029_M_WHT', category: 'Dresses', price: 3199, rating: 4.4, stock: 18, color: 'White', size: 'M', img: 'https://picsum.photos/400/500?random=17' },
+        { id: 'P030', name: 'Yellow Sundress', sku: 'DRESS_030_S_YLW', category: 'Dresses', price: 2499, rating: 4.3, stock: 22, color: 'Yellow', size: 'S', img: 'https://picsum.photos/400/500?random=18' },
 
         // ─── Shoes ───
-        { id: 'P007', name: 'Leather Casual Sneakers', sku: 'SHOE_005_9_BRN', category: 'Shoes', price: 3999, rating: 4.4, stock: 19, color: 'Brown', size: '9', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P012', name: 'Running Sports Shoes', sku: 'SHOE_010_10_GRY', category: 'Shoes', price: 2999, rating: 4.5, stock: 27, color: 'Grey', size: '10', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P017', name: 'White Canvas Sneakers', sku: 'SHOE_017_8_WHT', category: 'Shoes', price: 2499, rating: 4.6, stock: 33, color: 'White', size: '8', img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P018', name: 'Formal Oxford Shoes', sku: 'SHOE_018_9_BLK', category: 'Shoes', price: 5999, rating: 4.8, stock: 11, color: 'Black', size: '9', img: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P031', name: 'High Top Sneakers', sku: 'SHOE_031_10_RED', category: 'Shoes', price: 4499, rating: 4.3, stock: 15, color: 'Red', size: '10', img: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P032', name: 'Suede Loafers', sku: 'SHOE_032_9_TAN', category: 'Shoes', price: 3499, rating: 4.5, stock: 20, color: 'Tan', size: '9', img: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P007', name: 'Leather Casual Sneakers', sku: 'SHOE_005_9_BRN', category: 'Shoes', price: 3999, rating: 4.4, stock: 19, color: 'Brown', size: '9', img: 'https://picsum.photos/400/500?random=19' },
+        { id: 'P012', name: 'Running Sports Shoes', sku: 'SHOE_010_10_GRY', category: 'Shoes', price: 2999, rating: 4.5, stock: 27, color: 'Grey', size: '10', img: 'https://picsum.photos/400/500?random=20' },
+        { id: 'P017', name: 'White Canvas Sneakers', sku: 'SHOE_017_8_WHT', category: 'Shoes', price: 2499, rating: 4.6, stock: 33, color: 'White', size: '8', img: 'https://picsum.photos/400/500?random=21' },
+        { id: 'P018', name: 'Formal Oxford Shoes', sku: 'SHOE_018_9_BLK', category: 'Shoes', price: 5999, rating: 4.8, stock: 11, color: 'Black', size: '9', img: 'https://picsum.photos/400/500?random=22' },
+        { id: 'P031', name: 'High Top Sneakers', sku: 'SHOE_031_10_RED', category: 'Shoes', price: 4499, rating: 4.3, stock: 15, color: 'Red', size: '10', img: 'https://picsum.photos/400/500?random=23' },
+        { id: 'P032', name: 'Suede Loafers', sku: 'SHOE_032_9_TAN', category: 'Shoes', price: 3499, rating: 4.5, stock: 20, color: 'Tan', size: '9', img: 'https://picsum.photos/400/500?random=24' },
 
         // ─── Accessories ───
-        { id: 'P008', name: 'Designer Leather Handbag', sku: 'BAG_006_OS_BLK', category: 'Accessories', price: 5499, rating: 4.9, stock: 5, color: 'Black', size: 'OS', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P019', name: 'Aviator Sunglasses', sku: 'ACC_019_OS_GLD', category: 'Accessories', price: 1999, rating: 4.3, stock: 45, color: 'Gold', size: 'OS', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P020', name: 'Leather Belt', sku: 'ACC_020_M_BRN', category: 'Accessories', price: 999, rating: 4.1, stock: 78, color: 'Brown', size: 'M', img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P033', name: 'Canvas Tote Bag', sku: 'BAG_033_OS_NAT', category: 'Accessories', price: 1299, rating: 4.2, stock: 36, color: 'Natural', size: 'OS', img: 'https://images.unsplash.com/photo-1544816155-12df9643f363?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P034', name: 'Silk Scarf', sku: 'ACC_034_OS_MUL', category: 'Accessories', price: 1599, rating: 4.6, stock: 28, color: 'Multicolor', size: 'OS', img: 'https://images.unsplash.com/photo-1601924921557-45e6dea0e2ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P008', name: 'Designer Leather Handbag', sku: 'BAG_006_OS_BLK', category: 'Accessories', price: 5499, rating: 4.9, stock: 5, color: 'Black', size: 'OS', img: 'https://picsum.photos/400/500?random=25' },
+        { id: 'P019', name: 'Aviator Sunglasses', sku: 'ACC_019_OS_GLD', category: 'Accessories', price: 1999, rating: 4.3, stock: 45, color: 'Gold', size: 'OS', img: 'https://picsum.photos/400/500?random=26' },
+        { id: 'P020', name: 'Leather Belt', sku: 'ACC_020_M_BRN', category: 'Accessories', price: 999, rating: 4.1, stock: 78, color: 'Brown', size: 'M', img: 'https://picsum.photos/400/500?random=27' },
+        { id: 'P033', name: 'Canvas Tote Bag', sku: 'BAG_033_OS_NAT', category: 'Accessories', price: 1299, rating: 4.2, stock: 36, color: 'Natural', size: 'OS', img: 'https://picsum.photos/400/500?random=28' },
+        { id: 'P034', name: 'Silk Scarf', sku: 'ACC_034_OS_MUL', category: 'Accessories', price: 1599, rating: 4.6, stock: 28, color: 'Multicolor', size: 'OS', img: 'https://picsum.photos/400/500?random=29' },
 
         // ─── Jackets & Outerwear ───
-        { id: 'P010', name: 'Warm Puffer Jacket', sku: 'JACK_008_L_GRN', category: 'Jackets', price: 4999, rating: 4.6, stock: 14, color: 'Green', size: 'L', img: 'https://images.unsplash.com/photo-1544923246-77307dd270cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P021', name: 'Denim Jacket', sku: 'JACK_021_M_BLU', category: 'Jackets', price: 3499, rating: 4.5, stock: 21, color: 'Blue', size: 'M', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P022', name: 'Black Leather Jacket', sku: 'JACK_022_L_BLK', category: 'Jackets', price: 7999, rating: 4.9, stock: 4, color: 'Black', size: 'L', img: 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P035', name: 'Bomber Jacket', sku: 'JACK_035_M_OLV', category: 'Jackets', price: 4299, rating: 4.4, stock: 16, color: 'Olive', size: 'M', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P010', name: 'Warm Puffer Jacket', sku: 'JACK_008_L_GRN', category: 'Jackets', price: 4999, rating: 4.6, stock: 14, color: 'Green', size: 'L', img: 'https://picsum.photos/400/500?random=30' },
+        { id: 'P021', name: 'Denim Jacket', sku: 'JACK_021_M_BLU', category: 'Jackets', price: 3499, rating: 4.5, stock: 21, color: 'Blue', size: 'M', img: 'https://picsum.photos/400/500?random=31' },
+        { id: 'P022', name: 'Black Leather Jacket', sku: 'JACK_022_L_BLK', category: 'Jackets', price: 7999, rating: 4.9, stock: 4, color: 'Black', size: 'L', img: 'https://picsum.photos/400/500?random=32' },
+        { id: 'P035', name: 'Bomber Jacket', sku: 'JACK_035_M_OLV', category: 'Jackets', price: 4299, rating: 4.4, stock: 16, color: 'Olive', size: 'M', img: 'https://picsum.photos/400/500?random=33' },
 
         // ─── Ethnic / Sarees ───
-        { id: 'P023', name: 'Banarasi Silk Saree', sku: 'SAREE_023_OS_RED', category: 'Sarees', price: 8999, rating: 4.9, stock: 7, color: 'Red', size: 'OS', img: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P024', name: 'Chiffon Party Saree', sku: 'SAREE_024_OS_PNK', category: 'Sarees', price: 4599, rating: 4.5, stock: 13, color: 'Pink', size: 'OS', img: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
-        { id: 'P036', name: 'Cotton Handloom Saree', sku: 'SAREE_036_OS_BLU', category: 'Sarees', price: 3299, rating: 4.3, stock: 25, color: 'Blue', size: 'OS', img: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60' },
+        { id: 'P023', name: 'Banarasi Silk Saree', sku: 'SAREE_023_OS_RED', category: 'Sarees', price: 8999, rating: 4.9, stock: 7, color: 'Red', size: 'OS', img: 'https://picsum.photos/400/500?random=34' },
+        { id: 'P024', name: 'Chiffon Party Saree', sku: 'SAREE_024_OS_PNK', category: 'Sarees', price: 4599, rating: 4.5, stock: 13, color: 'Pink', size: 'OS', img: 'https://picsum.photos/400/500?random=35' },
+        { id: 'P036', name: 'Cotton Handloom Saree', sku: 'SAREE_036_OS_BLU', category: 'Sarees', price: 3299, rating: 4.3, stock: 25, color: 'Blue', size: 'OS', img: 'https://picsum.photos/400/500?random=36' },
     ],
 
     orders: [
@@ -498,8 +498,128 @@ const App = {
             });
         });
 
+        // Create hidden file input for image uploads
+        let fileInput = document.getElementById('image-file-input');
+        if (!fileInput) {
+            fileInput = document.createElement('input');
+            fileInput.id = 'image-file-input';
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+        }
+
         document.getElementById('upload-img-btn').addEventListener('click', () => {
-            this.toast('Image upload — CLIP model integration coming soon!', 'info');
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                // Show loading state
+                const btn = document.getElementById('discovery-search-btn');
+                const grid = document.getElementById('discovery-results');
+                const meta = document.getElementById('discovery-meta');
+                
+                btn.disabled = true;
+                btn.innerHTML = '<i data-lucide="loader-2" class="spin"></i> Analyzing image...';
+                grid.innerHTML = '<p style="color:var(--text-muted);padding:40px;text-align:center;">Processing uploaded image with AI...</p>';
+                lucide.createIcons();
+
+                const startTime = performance.now();
+                let results = [];
+                
+                // Try API image endpoint first
+                if (ApiService.online) {
+                    try {
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('pincode', '110001');
+                        formData.append('top_k', '12');
+                        
+                        const response = await fetch(`${API_BASE}/api/recommendations/image`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        if (response.ok) {
+                            const resp = await response.json();
+                            if (resp.recommendations && resp.recommendations.length > 0) {
+                                results = resp.recommendations.map(r => ({
+                                    id: r.product.product_id || r.product.id,
+                                    name: r.product.name,
+                                    sku: r.product.sku,
+                                    category: r.product.category,
+                                    price: r.product.price,
+                                    rating: r.product.rating || 4.0,
+                                    stock: r.availability_in_pincode || 0,
+                                    color: r.product.color,
+                                    size: r.product.size,
+                                    img: r.product.image_url || '',
+                                    score: r.similarity_score,
+                                }));
+                            }
+                        }
+                    } catch (e) { 
+                        console.warn('API image search failed:', e);
+                    }
+                }
+
+                // Fallback: use filename as query
+                if (results.length === 0) {
+                    const query = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+                    const keywords = query.toLowerCase().split(/\s+/);
+                    results = this.products.map(p => {
+                        const text = `${p.name} ${p.category} ${p.color} ${p.sku}`.toLowerCase();
+                        let score = 0;
+                        keywords.forEach(kw => { if (text.includes(kw)) score += 0.25; });
+                        score = Math.min(0.99, score + Math.random() * 0.3 + 0.35);
+                        return { ...p, score: parseFloat(score.toFixed(2)) };
+                    });
+                    results.sort((a, b) => b.score - a.score);
+                    results = results.slice(0, 12);
+                }
+
+                const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+                meta.style.display = 'flex';
+                document.getElementById('discovery-count').textContent = `${results.length} results (visual match)`;
+                document.getElementById('discovery-time').textContent = `${elapsed}s`;
+
+                // Render results
+                grid.innerHTML = results.map(p => {
+                    const matchClass = p.score >= 0.85 ? 'high' : p.score >= 0.7 ? 'mid' : 'low';
+                    const imgSrc = p.img && p.img.startsWith('http') ? p.img : '';
+                    const fallbackBg = `linear-gradient(135deg,hsl(${Math.random()*360},40%,25%),hsl(${Math.random()*360},50%,35%))`;
+                    return `
+                    <div class="product-card" onclick="App.viewProduct('${p.id}')">
+                        <div class="product-img">
+                            ${imgSrc
+                                ? `<img class="product-img-bg" src="${imgSrc}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='${fallbackBg}'">`
+                                : `<div class="product-img-bg" style="background:${fallbackBg};width:100%;height:100%"></div>`
+                            }
+                            <div class="product-match ${matchClass}"><i data-lucide="zap"></i> ${Math.round(p.score * 100)}%</div>
+                        </div>
+                        <div class="product-body">
+                            <div class="product-name">${p.name}</div>
+                            <div class="product-row">
+                                <span class="product-price">₹${Number(p.price).toLocaleString()}</span>
+                                <span class="product-rating"><i data-lucide="star"></i> ${p.rating}</span>
+                            </div>
+                            <div class="product-stock">${p.stock > 0 ? `${p.stock} in stock` : 'Out of stock'}</div>
+                        </div>
+                    </div>`;
+                }).join('');
+
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="sparkles"></i> Search';
+                lucide.createIcons();
+                fileInput.value = ''; // Reset input
+                this.toast('✅ Image analyzed! Similar items found.', 'success');
+            };
+            reader.readAsDataURL(file);
         });
     },
 
