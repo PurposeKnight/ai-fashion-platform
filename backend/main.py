@@ -1,7 +1,7 @@
 """
 FastAPI Backend Server for Zintoo AI-Powered Fashion Platform
 """
-from fastapi import FastAPI, HTTPException, File, UploadFile, BackgroundTasks
+from fastapi import FastAPI, HTTPException, File, UploadFile, BackgroundTasks, Body
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -16,11 +16,29 @@ from models import (
     RecommendationQuery, RecommendationResponse, RecommendationResult,
     InventoryReallocation
 )
+from pydantic import BaseModel
+
+# Request/Response models for orchestration
+class OrchestrationRequest(BaseModel):
+    pincode: str = None
+    sku_id: str = None
+    dry_run: bool = False
+
+class RiskRequest(BaseModel):
+    pincode: str = None
+    sku_id: str = None
+
 from database import get_db
 from dotenv import load_dotenv
 import os
+import logging
+from auto_restock import AutoRestockingSystem
 
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -40,6 +58,30 @@ app.add_middleware(
 
 # Initialize database on startup
 db = get_db()
+
+# Initialize auto-restocking system
+auto_restock_system = AutoRestockingSystem(
+    db=db,
+    restock_threshold=20,  # Restock when stock falls below 20
+    check_interval_minutes=5  # Check every 5 minutes
+)
+
+# Startup event
+@app.on_event("startup")
+async def startup():
+    """Initialize systems on startup"""
+    logger.info("Starting Zintoo API...")
+    logger.info("MongoDB connected successfully")
+    auto_restock_system.start()
+    logger.info("Auto-restocking system initialized")
+
+# Shutdown event
+@app.on_event("shutdown")
+async def shutdown():
+    """Cleanup on shutdown"""
+    logger.info("Shutting down Zintoo API...")
+    auto_restock_system.stop()
+    logger.info("Auto-restocking system stopped")
 
 
 # ==================== HEALTH CHECK ====================
@@ -75,6 +117,36 @@ async def get_product(product_id: str):
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return product.dict()
+
+
+@app.put("/api/products/{product_id}", tags=["Products"])
+async def update_product(product_id: str, data: dict = Body(...)):
+    """Update product information"""
+    try:
+        product = db.get_product(product_id)
+        if not product:
+            raise HTTPException(status_code=404, detail="Product not found")
+        
+        # Update allowed fields
+        allowed_fields = ['name', 'category', 'price', 'color', 'size', 'rating', 'description']
+        for field in allowed_fields:
+            if field in data:
+                setattr(product, field, data[field])
+        
+        # Save updated product
+        db.update_product(product)
+        logger.info(f"Updated product {product_id}: {data}")
+        
+        return {
+            "success": True,
+            "message": f"Product {product_id} updated successfully",
+            "product": product.dict()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating product {product_id}: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/api/products", tags=["Products"])
@@ -259,24 +331,72 @@ async def get_recommendations(query: RecommendationQuery):
     """Get product recommendations based on text/image"""
     try:
         # Get all products for this implementation
-        all_products = db.get_all_products(limit=100)
+        all_products = db.get_all_products(limit=200)
         
-        # Simple filtering: match by pincode and category if provided
+        # Enhanced filtering: match by text query and category
         results = []
-        for idx, product in enumerate(all_products[:query.top_k]):
-            result = RecommendationResult(
-                product=product,
-                similarity_score=0.85 + (0.01 * idx),  # Simulated similarity
-                availability_in_pincode=db.check_stock(product.sku, query.pincode),
-                rank=idx + 1
-            )
-            results.append(result)
+        text_input = (query.text_input or "").lower()
         
-        return RecommendationResponse(
+        # Score products based on text match
+        scored_products = []
+        for product in all_products:
+            score = 0.5  # Base score
+            product_name = getattr(product, 'name', product.get('name', '')).lower() if isinstance(product, dict) else product.name.lower()
+            category = getattr(product, 'category', product.get('category', '')).lower() if isinstance(product, dict) else product.category.lower()
+            
+            # Boost score for word matches
+            if text_input:
+                words = text_input.split()
+                for word in words:
+                    if word in product_name or word in category:
+                        score += 0.15
+            
+            # Category boost
+            if 'jacket' in text_input and 'jacket' in category:
+                score += 0.25
+            elif 'shirt' in text_input and 'shirt' in category:
+                score += 0.25
+            elif 'kurta' in text_input and 'kurta' in category:
+                score += 0.25
+            elif 'jeans' in text_input and 'jeans' in category:
+                score += 0.25
+            elif 'dress' in text_input and 'dress' in category:
+                score += 0.25
+            
+            scored_products.append((product, min(score, 0.95)))  # Cap at 95%
+        
+        # Sort by score and get top K
+        scored_products.sort(key=lambda x: x[1], reverse=True)
+        
+        for idx, (product, score) in enumerate(scored_products[:query.top_k]):
+            try:
+                sku = getattr(product, 'sku', product.get('sku')) if isinstance(product, dict) else product.sku
+                available = db.check_stock(sku, query.pincode)
+                
+                result = RecommendationResult(
+                    product=product,
+                    similarity_score=score,
+                    availability_in_pincode=available,
+                    rank=idx + 1
+                )
+                results.append(result)
+            except Exception as e:
+                logger.warning(f"Error processing recommendation {idx}: {e}")
+                continue
+        
+        response_data = RecommendationResponse(
             query_id=f"REC-{uuid.uuid4().hex[:8].upper()}",
             recommendations=results
-        ).dict()
+        )
+        
+        # Convert response to dict, handling model_dump for Pydantic v2
+        if hasattr(response_data, 'model_dump'):
+            return response_data.model_dump()
+        else:
+            return response_data.dict()
+            
     except Exception as e:
+        logger.error(f"Recommendation error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -379,6 +499,190 @@ async def monitor_demand_after_order(sku: str, pincode: str):
 async def optimize_inventory_for_pincode(pincode: str):
     """Background task to optimize inventory for a pincode"""
     pass
+
+
+# ==================== ORCHESTRATION ENDPOINTS ====================
+@app.post("/inventory/risk", tags=["Orchestration"])
+async def analyze_risk(request: RiskRequest):
+    """Analyze inventory risk for a location/SKU"""
+    try:
+        # Get inventory data for the pincode/SKU
+        inventory = db.get_inventory_by_pincode(request.pincode) if request.pincode else []
+        if request.sku_id:
+            inventory = [inv for inv in inventory if getattr(inv, 'sku', None) == request.sku_id]
+        
+        risks = []
+        for inv_item in inventory:
+            available = getattr(inv_item, 'available_quantity', 0) or getattr(inv_item, 'quantity', 0)
+            
+            # Simple risk calculation
+            if available < 10:
+                risk_level = "critical"
+                risk_score = 0.9
+            elif available < 25:
+                risk_level = "high"
+                risk_score = 0.7
+            elif available < 50:
+                risk_level = "medium"
+                risk_score = 0.4
+            else:
+                risk_level = "low"
+                risk_score = 0.1
+            
+            risks.append({
+                "warehouse_id": getattr(inv_item, 'warehouse_id', 'Unknown'),
+                "pincode": request.pincode or getattr(inv_item, 'pincode', 'Unknown'),
+                "sku_id": request.sku_id or getattr(inv_item, 'sku', 'Unknown'),
+                "available_stock": available,
+                "stockout_risk": risk_score,
+                "sla_risk": risk_score * 0.8,
+                "risk_label": risk_level,
+            })
+        
+        return {
+            "pincode": request.pincode,
+            "sku_id": request.sku_id,
+            "risks": risks
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Risk analysis failed: {str(e)}")
+
+
+@app.post("/inventory/orchestrate", tags=["Orchestration"])
+async def run_orchestration(request: OrchestrationRequest):
+    """Run orchestration to optimize inventory allocation"""
+    try:
+        # Get inventory data
+        inventory = db.get_inventory_by_pincode(request.pincode) if request.pincode else []
+        if request.sku_id:
+            inventory = [inv for inv in inventory if getattr(inv, 'sku', None) == request.sku_id]
+        
+        actions = []
+        
+        # Generate reallocation actions for items at risk
+        for inv_item in inventory:
+            available = getattr(inv_item, 'available_quantity', 0) or getattr(inv_item, 'quantity', 0)
+            warehouse = getattr(inv_item, 'warehouse_id', 'WH-DEFAULT')
+            sku = getattr(inv_item, 'sku', request.sku_id or 'UNKNOWN')
+            
+            if available < 20:  # Critical threshold
+                actions.append({
+                    "action_type": "transfer",
+                    "source_warehouse": "WH-Delhi-A",
+                    "destination_warehouse": warehouse,
+                    "sku_id": sku,
+                    "quantity": 25,
+                    "eta_hours": 6,
+                    "priority": "critical",
+                    "explanation": f"Stock critically low ({available} units). Immediate transfer initiated."
+                })
+        
+        summary = {
+            "total_actions": len(actions),
+            "critical_actions": len([a for a in actions if a.get('priority') == 'critical']),
+            "estimated_cost": len(actions) * 150.0,
+            "estimated_sla_improvement": f"+{len(actions) * 8}%"
+        }
+        
+        return {
+            "success": True,
+            "dry_run": request.dry_run,
+            "pincode": request.pincode,
+            "sku_id": request.sku_id,
+            "actions": actions,
+            "summary": summary
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Orchestration failed: {str(e)}")
+
+
+# ==================== AUTO-RESTOCKING ENDPOINTS ====================
+@app.get("/inventory/auto-restock/status", tags=["Auto-Restocking"])
+async def get_auto_restock_status():
+    """Get current status of the auto-restocking system"""
+    try:
+        status = auto_restock_system.get_status()
+        return {
+            "system": status,
+            "message": "Auto-restocking system is monitoring inventory in real-time"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get status: {str(e)}")
+
+
+@app.get("/inventory/auto-restock/history", tags=["Auto-Restocking"])
+async def get_auto_restock_history(limit: int = 50):
+    """Get history of automatic restock actions"""
+    try:
+        history = auto_restock_system.get_restock_history(limit)
+        return {
+            "total_actions": len(auto_restock_system.restock_history),
+            "recent_actions": history,
+            "limit": limit
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to get history: {str(e)}")
+
+
+@app.post("/inventory/auto-restock/trigger", tags=["Auto-Restocking"])
+async def trigger_auto_restock_check():
+    """Manually trigger an inventory check and restock (normally runs automatically)"""
+    try:
+        logger.info("Manual trigger for auto-restock check received")
+        auto_restock_system.check_and_restock()
+        
+        return {
+            "success": True,
+            "message": "Auto-restock check triggered successfully",
+            "recent_actions": auto_restock_system.get_restock_history(10)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to trigger check: {str(e)}")
+
+
+@app.post("/inventory/auto-restock/update-threshold", tags=["Auto-Restocking"])
+async def update_restock_threshold(threshold: int = 20):
+    """Update the restock threshold"""
+    try:
+        if threshold < 0:
+            raise ValueError("Threshold must be positive")
+        
+        old_threshold = auto_restock_system.restock_threshold
+        auto_restock_system.restock_threshold = threshold
+        logger.info(f"Restock threshold updated from {old_threshold} to {threshold}")
+        
+        return {
+            "success": True,
+            "message": f"Threshold updated from {old_threshold} to {threshold}",
+            "threshold": threshold
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update threshold: {str(e)}")
+
+
+@app.post("/inventory/auto-restock/update-interval", tags=["Auto-Restocking"])
+async def update_check_interval(minutes: int = 5):
+    """Update the inventory check interval"""
+    try:
+        if minutes < 1:
+            raise ValueError("Interval must be at least 1 minute")
+        
+        old_interval = auto_restock_system.check_interval_minutes
+        auto_restock_system.check_interval_minutes = minutes
+        
+        # Restart scheduler with new interval
+        auto_restock_system.stop()
+        auto_restock_system.start()
+        
+        logger.info(f"Check interval updated from {old_interval} to {minutes} minutes")
+        
+        return {
+            "success": True,
+            "message": f"Check interval updated from {old_interval} to {minutes} minutes",
+            "interval_minutes": minutes
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to update interval: {str(e)}")
 
 
 # ==================== ROOT ENDPOINT ====================

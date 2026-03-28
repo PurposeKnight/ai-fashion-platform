@@ -115,6 +115,16 @@ class ZintooDatabase:
         docs = list(self.db['products'].find().limit(limit))
         return [Product(**{k: v for k, v in doc.items() if k != '_id'}) for doc in docs]
 
+    def update_product(self, product: Product) -> bool:
+        """Update an existing product"""
+        if self.db is None:
+            return False
+        result = self.db['products'].update_one(
+            {'product_id': product.product_id},
+            {'$set': product.dict()}
+        )
+        return result.modified_count > 0
+
     # ==================== INVENTORY OPERATIONS ====================
     def upsert_inventory(self, inventory: WarehouseInventory):
         """Insert or update inventory"""
@@ -167,6 +177,21 @@ class ZintooDatabase:
             {'$inc': {'current_stock': quantity}}
         )
         return result.modified_count > 0
+
+    def get_all_inventory(self) -> List[Dict[str, Any]]:
+        """Get all inventory across all warehouses"""
+        if self.db is None:
+            return []
+        docs = list(self.db['inventory'].find())
+        # Convert MongoDBObjects to dicts and remove _id
+        return [{'sku': doc.get('sku'), 'warehouse_id': doc.get('warehouse_id'), 'pincode': doc.get('pincode'), 'current_stock': doc.get('current_stock', 0), 'available_quantity': doc.get('current_stock', 0)} for doc in docs]
+
+    def get_all_warehouses(self) -> List[str]:
+        """Get all warehouse IDs"""
+        if self.db is None:
+            return []
+        result = self.db['inventory'].distinct('warehouse_id')
+        return list(result) if result else []
 
     # ==================== FORECAST OPERATIONS ====================
     def insert_forecast(self, forecast: DemandForecast):

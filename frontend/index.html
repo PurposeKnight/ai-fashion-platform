@@ -37,6 +37,10 @@
                 <a href="#" class="nav-link" data-page="inventory">
                     <i data-lucide="package"></i><span>Inventory</span>
                 </a>
+                <a href="#" class="nav-link" data-page="auto-restock">
+                    <i data-lucide="zap"></i><span>Auto-Restock</span>
+                    <span class="nav-badge pulse" style="background: linear-gradient(135deg, #00ff88, #00cc88);">Live</span>
+                </a>
                 <a href="#" class="nav-link" data-page="agent">
                     <i data-lucide="cpu"></i><span>Agent</span>
                     <span class="nav-badge live">Live</span>
@@ -345,6 +349,54 @@
                             <tbody></tbody>
                         </table>
                     </div>
+                </section>
+
+                <!-- ==================== AUTO-RESTOCK PAGE ==================== -->
+                <section class="page" id="page-auto-restock">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Automatic Restocking System</h1>
+                            <p class="page-subtitle">Live inventory monitoring and autonomous restock execution</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="trigger-restock-btn" style="background: linear-gradient(135deg, #00ff88, #00cc88);"><i data-lucide="zap"></i> Manual Restock Check</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="metric-card" style="--accent:var(--green)">
+                            <span class="metric-value" id="restock-running">RUNNING</span>
+                            <span class="metric-label">System Status</span>
+                        </div>
+                        <div class="metric-card" style="--accent:var(--cyan)">
+                            <span class="metric-value" id="restock-threshold">20</span>
+                            <span class="metric-label">Restock Threshold</span>
+                        </div>
+                        <div class="metric-card" style="--accent:var(--amber)">
+                            <span class="metric-value" id="restock-interval">5 min</span>
+                            <span class="metric-label">Check Interval</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <div class="section-header">
+                            <h2>Restocking Activity Log</h2>
+                            <small id="restock-last-update">Last updated: Just now</small>
+                        </div>
+                        <div id="restock-activity-log" style="background: var(--bg-card); border-radius: 12px; padding: 20px; max-height: 400px; overflow-y: auto;">
+                            <div style="color: var(--text-secondary); text-align: center; padding: 40px 20px;">
+                                <i data-lucide="loader" style="width: 32px; height: 32px; margin: 0 auto 10px; animation: spin 1s linear infinite;"></i>
+                                <p>Loading activity log...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        @keyframes spin {
+                            from { transform: rotate(0deg); }
+                            to { transform: rotate(360deg); }
+                        }
+                    </style>
                 </section>
 
                 <!-- ==================== AGENT PAGE ==================== -->
