@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zintoo AI — Fashion Intelligence Platform</title>
+    <meta name="description" content="AI-powered fashion intelligence with multimodal recommendations, hyper-local demand forecasting, and autonomous inventory orchestration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app-shell">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-mark"><i data-lucide="sparkles"></i></div>
+                <span class="logo-text">Zintoo<span class="accent">AI</span></span>
+            </div>
+
+            <nav class="sidebar-nav" id="main-nav">
+                <div class="nav-group-label">MAIN</div>
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-link" data-page="discovery">
+                    <i data-lucide="search"></i><span>AI Discovery</span>
+                </a>
+                <a href="#" class="nav-link" data-page="forecasts">
+                    <i data-lucide="trending-up"></i><span>Demand Forecasts</span>
+                </a>
+
+                <div class="nav-group-label">OPERATIONS</div>
+                <a href="#" class="nav-link" data-page="inventory">
+                    <i data-lucide="package"></i><span>Inventory</span>
+                </a>
+                <a href="#" class="nav-link" data-page="agent">
+                    <i data-lucide="cpu"></i><span>Agent</span>
+                    <span class="nav-badge live">Live</span>
+                </a>
+
+                <div class="nav-group-label">SYSTEM</div>
+                <a href="#" class="nav-link" data-page="settings">
+                    <i data-lucide="settings"></i><span>Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="agent-status-pill">
+                    <span class="pulse-dot"></span>
+                    <div>
+                        <div class="status-label">Agent Active</div>
+                        <div class="status-sub">Autonomous Mode</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Area -->
+        <div class="main-area">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="hamburger" id="hamburger-btn"><i data-lucide="menu"></i></button>
+                <div class="topbar-search">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="global-search" placeholder="Search products, SKUs, pincodes..." autocomplete="off">
+                    <kbd>⌘K</kbd>
+                </div>
+                <div class="topbar-right">
+                    <button class="topbar-icon-btn" id="theme-toggle" title="Toggle theme"><i data-lucide="moon"></i></button>
+                    <button class="topbar-icon-btn notif-btn" id="notif-btn" title="Notifications">
+                        <i data-lucide="bell"></i>
+                        <span class="notif-count">3</span>
+                    </button>
+                    <div class="topbar-profile" id="profile-btn">
+                        <div class="profile-info">
+                            <span class="profile-name">System Admin</span>
+                            <span class="profile-role">Owner</span>
+                        </div>
+                        <div class="avatar">SA</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Container -->
+            <div class="page-container" id="page-container">
+
+                <!-- ==================== DASHBOARD PAGE ==================== -->
+                <section class="page active" id="page-dashboard">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Intelligence Overview</h1>
+                            <p class="page-subtitle">Real-time AI metrics, forecasting & orchestration status</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" id="export-btn"><i data-lucide="download"></i> Export</button>
+                            <button class="btn btn-primary" id="optimize-btn"><i data-lucide="sparkles"></i> Optimize Now</button>
+                        </div>
+                    </div>
+
+                    <div class="kpi-row">
+                        <div class="kpi-card" style="--accent: var(--purple)">
+                            <div class="kpi-icon"><i data-lucide="shirt"></i></div>
+                            <div class="kpi-body">
+                                <span class="kpi-label">Active Products</span>
+                                <span class="kpi-value" id="kpi-products">12,408</span>
+                                <span class="kpi-change up"><i data-lucide="trending-up"></i> Embeddings synced</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card" style="--accent: var(--cyan)">
+                            <div class="kpi-icon"><i data-lucide="bar-chart-2"></i></div>
+                            <div class="kpi-body">
+                                <span class="kpi-label">Predicted Demand (24h)</span>
+                                <span class="kpi-value" id="kpi-demand">48,290</span>
+                                <span class="kpi-change up"><i data-lucide="trending-up"></i> +12.5% vs yesterday</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card" style="--accent: var(--pink)">
+                            <div class="kpi-icon"><i data-lucide="repeat"></i></div>
+                            <div class="kpi-body">
+                                <span class="kpi-label">Auto-Reallocations</span>
+                                <span class="kpi-value" id="kpi-realloc">342</span>
+                                <span class="kpi-change neutral"><i data-lucide="check-circle"></i> 97% SLA</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card" style="--accent: var(--amber)">
+                            <div class="kpi-icon"><i data-lucide="star"></i></div>
+                            <div class="kpi-body">
+                                <span class="kpi-label">Recommendation NDCG</span>
+                                <span class="kpi-value" id="kpi-ndcg">0.89</span>
+                                <span class="kpi-change up"><i data-lucide="trending-up"></i> High accuracy</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2-1">
+                        <div class="card">
+                            <div class="card-head">
+                                <h3><i data-lucide="activity"></i> Demand Trend (48h)</h3>
+                                <div class="card-head-actions">
+                                    <select class="mini-select" id="dash-sku-select">
+                                        <option>KURTA_001_M_BLU</option>
+                                        <option>SHIRT_002_L_WHT</option>
+                                        <option>JEANS_003_M_BLK</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="dashChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">
+                                <h3><i data-lucide="cpu"></i> Agent Feed</h3>
+                                <span class="live-badge"><span class="pulse-dot small"></span> Live</span>
+                            </div>
+                            <div class="card-body log-feed" id="dash-log-feed"></div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-6">
+                        <div class="card-head">
+                            <h3><i data-lucide="shopping-bag"></i> Recent Orders</h3>
+                            <button class="btn btn-ghost btn-sm" onclick="App.navigateTo('inventory')">View All →</button>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="data-table" id="recent-orders-table">
+                                <thead>
+                                    <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== AI DISCOVERY PAGE ==================== -->
+                <section class="page" id="page-discovery">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">AI Discovery</h1>
+                            <p class="page-subtitle">Multimodal semantic product search — text or image</p>
+                        </div>
+                    </div>
+
+                    <div class="card discovery-search-card">
+                        <div class="discovery-search-bar">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="discovery-input" placeholder="Describe what you're looking for... e.g. casual blue kurta for college" value="casual blue kurta for college wear">
+                            <button class="btn btn-outline btn-sm" id="upload-img-btn"><i data-lucide="image"></i> Upload Image</button>
+                            <button class="btn btn-primary" id="discovery-search-btn"><i data-lucide="sparkles"></i> Search</button>
+                        </div>
+                        <div class="discovery-tags">
+                            <span class="tag" data-query="trendy summer dress">☀️ Summer Dress</span>
+                            <span class="tag" data-query="formal office shirt men">👔 Formal Shirt</span>
+                            <span class="tag" data-query="ethnic festive kurta women">🪔 Festive Kurta</span>
+                            <span class="tag" data-query="casual sneakers men">👟 Sneakers</span>
+                            <span class="tag" data-query="designer handbag leather">👜 Handbags</span>
+                            <span class="tag" data-query="winter jacket warm puffer">🧥 Winter Jacket</span>
+                        </div>
+                    </div>
+
+                    <div class="discovery-results-meta" id="discovery-meta" style="display:none;">
+                        <span id="discovery-count"></span>
+                        <span id="discovery-time"></span>
+                    </div>
+
+                    <div class="product-grid" id="discovery-results"></div>
+                </section>
+
+                <!-- ==================== DEMAND FORECASTS PAGE ==================== -->
+                <section class="page" id="page-forecasts">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Demand Forecasts</h1>
+                            <p class="page-subtitle">Hyper-local hourly SKU-level demand prediction with 95% confidence intervals</p>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <div class="filter-group">
+                            <label>SKU</label>
+                            <select class="select" id="fc-sku">
+                                <option>KURTA_001_M_BLU</option>
+                                <option>SHIRT_002_L_WHT</option>
+                                <option>JEANS_003_M_BLK</option>
+                                <option>DRESS_004_S_RED</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Pincode</label>
+                            <select class="select" id="fc-pincode">
+                                <option value="110001">110001 — New Delhi</option>
+                                <option value="400001">400001 — Mumbai</option>
+                                <option value="560001">560001 — Bengaluru</option>
+                                <option value="700001">700001 — Kolkata</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Horizon</label>
+                            <select class="select" id="fc-horizon">
+                                <option value="24">24 hours</option>
+                                <option value="48" selected>48 hours</option>
+                                <option value="72">72 hours</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="fc-run-btn"><i data-lucide="play"></i> Generate Forecast</button>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card col-span-2">
+                            <div class="card-head"><h3><i data-lucide="line-chart"></i> Forecast Chart</h3></div>
+                            <div class="card-body chart-container large">
+                                <canvas id="forecastChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-3 mt-6">
+                        <div class="metric-card">
+                            <span class="metric-value" id="fc-mape">12.3%</span>
+                            <span class="metric-label">MAPE</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="fc-rmse">2.45</span>
+                            <span class="metric-label">RMSE (units)</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-value" id="fc-mae">1.89</span>
+                            <span class="metric-label">MAE (units)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== INVENTORY PAGE ==================== -->
+                <section class="page" id="page-inventory">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Inventory Management</h1>
+                            <p class="page-subtitle">Track stock levels, manage products & warehouses</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline" id="add-product-btn"><i data-lucide="plus"></i> Add Product</button>
+                        </div>
+                    </div>
+
+                    <div class="tabs" id="inv-tabs">
+                        <button class="tab active" data-tab="products">Products</button>
+                        <button class="tab" data-tab="stock">Stock Levels</button>
+                        <button class="tab" data-tab="orders">Orders</button>
+                    </div>
+
+                    <div class="tab-content active" id="tab-products">
+                        <div class="table-toolbar">
+                            <div class="table-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" id="product-search" placeholder="Search products...">
+                            </div>
+                            <select class="mini-select" id="product-cat-filter">
+                                <option value="">All Categories</option>
+                                <option>Kurtas</option>
+                                <option>Shirts</option>
+                                <option>Jeans</option>
+                                <option>Dresses</option>
+                                <option>Shoes</option>
+                                <option>Accessories</option>
+                                <option>Jackets</option>
+                                <option>Sarees</option>
+                            </select>
+                        </div>
+                        <table class="data-table" id="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th><th>SKU</th><th>Category</th><th>Price</th><th>Rating</th><th>Stock</th><th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="table-pagination" id="products-pagination"></div>
+                    </div>
+
+                    <div class="tab-content" id="tab-stock">
+                        <div class="table-toolbar">
+                            <div class="table-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" id="stock-search" placeholder="Search by SKU or warehouse...">
+                            </div>
+                        </div>
+                        <table class="data-table" id="stock-table">
+                            <thead>
+                                <tr><th>SKU</th><th>Warehouse</th><th>Pincode</th><th>Quantity</th><th>Status</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-content" id="tab-orders">
+                        <table class="data-table" id="orders-table">
+                            <thead>
+                                <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Pincode</th><th>Status</th><th>Date</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==================== AGENT PAGE ==================== -->
+                <section class="page" id="page-agent">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Orchestration Agent</h1>
+                            <p class="page-subtitle">Autonomous inventory optimization & SLA compliance engine</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="trigger-agent-btn"><i data-lucide="zap"></i> Trigger Optimization</button>
+                        </div>
+                    </div>
+
+                    <div class="grid-3">
+                        <div class="metric-card" style="--accent:var(--green)">
+                            <span class="metric-value" id="agent-fulfillment">90%</span>
+                            <span class="metric-label">Fulfillment Rate</span>
+                        </div>
+                        <div class="metric-card" style="--accent:var(--cyan)">
+                            <span class="metric-value" id="agent-delivery">45m</span>
+                            <span class="metric-label">Avg Delivery Time</span>
+                        </div>
+                        <div class="metric-card" style="--accent:var(--purple)">
+                            <span class="metric-value" id="agent-sla">97%</span>
+                            <span class="metric-label">SLA Adherence</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-2-1 mt-6">
+                        <div class="card">
+                            <div class="card-head">
+                                <h3><i data-lucide="list"></i> Reallocation History</h3>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="data-table" id="realloc-table">
+                                    <thead>
+                                        <tr><th>ID</th><th>SKU</th><th>From</th><th>To</th><th>Qty</th><th>Status</th><th>Time</th></tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head">
+                                <h3><i data-lucide="terminal"></i> Agent Logs</h3>
+                                <span class="live-badge"><span class="pulse-dot small"></span> Live</span>
+                            </div>
+                            <div class="card-body log-feed" id="agent-log-feed"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SETTINGS PAGE ==================== -->
+                <section class="page" id="page-settings">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Settings</h1>
+                            <p class="page-subtitle">Configure system parameters, API connections & agent behavior</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="card">
+                            <div class="card-head"><h3><i data-lucide="database"></i> Database</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>MongoDB URI</label>
+                                    <input type="text" class="input" value="mongodb://localhost:27017" id="set-mongo-uri">
+                                </div>
+                                <div class="form-group">
+                                    <label>Database Name</label>
+                                    <input type="text" class="input" value="zintoo_db" id="set-db-name">
+                                </div>
+                                <button class="btn btn-primary btn-sm mt-4" id="save-db-btn">Save Database Config</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head"><h3><i data-lucide="server"></i> API Server</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Host</label>
+                                    <input type="text" class="input" value="0.0.0.0" id="set-host">
+                                </div>
+                                <div class="form-group">
+                                    <label>Port</label>
+                                    <input type="number" class="input" value="8000" id="set-port">
+                                </div>
+                                <div class="form-group">
+                                    <label class="toggle-label">
+                                        <input type="checkbox" class="toggle" id="set-debug" checked> Debug Mode
+                                    </label>
+                                </div>
+                                <button class="btn btn-primary btn-sm mt-4" id="save-api-btn">Save API Config</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head"><h3><i data-lucide="cpu"></i> Agent Configuration</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="toggle-label">
+                                        <input type="checkbox" class="toggle" id="set-agent-enabled" checked> Agent Enabled
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Check Interval (minutes)</label>
+                                    <input type="number" class="input" value="30" id="set-interval">
+                                </div>
+                                <div class="form-group">
+                                    <label>Optimization Threshold</label>
+                                    <input type="range" min="0" max="100" value="70" class="range" id="set-threshold">
+                                    <span class="range-value" id="threshold-value">0.70</span>
+                                </div>
+                                <button class="btn btn-primary btn-sm mt-4" id="save-agent-btn">Save Agent Config</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-head"><h3><i data-lucide="brain"></i> ML Model</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>CLIP Model</label>
+                                    <select class="select" id="set-clip-model">
+                                        <option>openai/clip-vit-base-patch32</option>
+                                        <option>openai/clip-vit-large-patch14</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Device</label>
+                                    <select class="select" id="set-device">
+                                        <option>cpu</option>
+                                        <option>cuda</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary btn-sm mt-4" id="save-ml-btn">Save ML Config</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="product-modal">
+            <button class="modal-close" id="modal-close"><i data-lucide="x"></i></button>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notif-panel">
+        <div class="notif-header">
+            <h3>Notifications</h3>
+            <button class="btn btn-ghost btn-sm" id="clear-notifs">Clear All</button>
+        </div>
+        <div class="notif-list" id="notif-list"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
